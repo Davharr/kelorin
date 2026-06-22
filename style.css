@@ -1,0 +1,231 @@
+/* =============================================================================
+   KELOR.IN - Vanilla CSS Animations & Styling
+   ============================================================================= */
+
+/* 1. ANIMASI TRANSISI LAYAR - FADE IN */
+/* ============================================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+section {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 2. ANIMASI KAMERA SCAN - SCANNER PULSE */
+/* ============================================================================= */
+
+@keyframes scannerPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7),
+                0 0 0 0 rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0),
+                0 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0),
+                0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.scanner-pulse {
+  animation: scannerPulse 2s infinite;
+}
+
+/* Tambahan: Bingkai kamera dengan efek glow */
+#scan-screen .relative.w-64.h-64 {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+  animation: scannerPulse 2s infinite;
+}
+
+/* 3. SEMBUNYIKAN SCROLLBAR */
+/* ============================================================================= */
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Untuk elemen dengan overflow-y-auto */
+section {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+section::-webkit-scrollbar {
+  display: none;
+}
+
+/* 4. INTERAKSI TOMBOL - STATE ACTIVE */
+/* ============================================================================= */
+
+/* Aturan Global: Beri efek menyusut pada SEMUA tombol, KECUALI tombol navbar */
+button:not(.nav-btn):active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease-in-out;
+}
+
+button:active::after {
+  content: '';
+}
+
+/* Efek klik khusus untuk tombol Shutter Kamera */
+#shutter-btn:active {
+  transform: scale(0.92);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
+}
+
+/* Efek klik khusus untuk tombol Cancel di layar Scan */
+#cancel-scan-btn:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+/* ---------------------------------------------------------
+   PERBAIKAN NAVBAR: MENGUNCI BACKGROUND & ANIMASI IKON
+   --------------------------------------------------------- */
+
+/* 1. Kunci struktur kontainer tombol navbar agar statis 100% */
+.nav-btn {
+  /* Hilangkan outline dan tap highlight (bayangan klik) bawaan browser mobile */
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  
+  /* Pastikan tombol tidak pernah menyusut atau bergeser ukurannya */
+  transform: none !important;
+  
+  /* Hanya transisikan perubahan warna, BUKAN transform atau background */
+  transition: color 0.2s ease !important;
+}
+
+/* 2. Setup animasi untuk elemen di DALAM tombol (SVG dan Teks) */
+.nav-btn svg,
+.nav-btn span {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); /* Efek membal halus */
+  transform-origin: center bottom;
+  will-change: transform; /* Optimasi render browser */
+}
+
+/* 3. Terapkan animasi menyusut HANYA saat bagian manapun dari tombol disentuh/diklik */
+.nav-btn:active svg {
+  transform: scale(0.85) translateY(2px);
+}
+
+.nav-btn:active span {
+  transform: scale(0.90);
+}
+
+/* 5. HOVER EFFECTS */
+/* ============================================================================= */
+
+button:hover {
+  opacity: 0.9;
+}
+
+#shutter-btn:hover {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+}
+
+/* 6. SMOOTH TRANSITIONS */
+/* ============================================================================= */
+
+.hidden {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Animasi list items di home screen */
+.flex.items-center.gap-3.bg-white.rounded-lg {
+  transition: all 0.2s ease;
+}
+
+.flex.items-center.gap-3.bg-white.rounded-lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Animasi kartu manfaat */
+.bg-gradient-to-br {
+  transition: all 0.3s ease;
+}
+
+.bg-gradient-to-br:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 7. ANIMASI KHUSUS UNTUK SVG CHART */
+/* ============================================================================= */
+
+svg rect {
+  transition: all 0.3s ease;
+}
+
+/* 8. CUSTOM FOCUS STATES */
+/* ============================================================================= */
+
+input:focus {
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  animation: focusGlow 0.3s ease-in-out;
+}
+
+@keyframes focusGlow {
+  from {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.3);
+  }
+  to {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.1);
+  }
+}
+
+/* 9. KUSTOMISASI SWEETALERT2 (TEMA KELOR.IN) */
+/* ============================================================================= */
+div:where(.swal2-container) div:where(.swal2-popup) {
+  border-radius: 1.5rem !important; /* Rounded-3xl seperti Tailwind */
+  padding: 1.5rem !important;
+  font-family: inherit !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+  background-color: #16a34a !important; /* text-green-600 */
+  border-radius: 0.75rem !important;
+  padding: 0.75rem 2rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2) !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:active {
+  transform: scale(0.95);
+}
+
+div:where(.swal2-container) h2:where(.swal2-title) {
+  font-size: 1.25rem !important;
+  color: #111827 !important; /* gray-900 */
+}
+
+div:where(.swal2-container) div:where(.swal2-html-container) {
+  font-size: 0.875rem !important;
+  color: #4b5563 !important; /* gray-600 */
+}
+/* =============================================================================
+   END OF STYLE.CSS
+   ============================================================================= */
