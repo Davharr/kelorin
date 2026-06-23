@@ -89,131 +89,304 @@
         </section>
 
         <!-- HOME SCREEN -->
-        <section id="home-screen" class="hidden p-4 pb-20 overflow-y-auto flex-1">
-            <!-- Header dengan Salam & Foto Profil -->
-            <div class="flex items-center justify-between mb-6 pt-4">
-                <div>
-                    <p class="text-gray-600 text-sm">Selamat Pagi ??</p>
-                    <h2 class="text-2xl font-bold text-gray-900">Halo, Pengguna!</h2>
-                </div>
-                <div class="w-12 h-12 bg-green-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    ??
-                </div>
-            </div>
-
-            <!-- Kartu Manfaat Kelor (Grid 1 Kolom) -->
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">Manfaat Kelor</h3>
-                <div class="space-y-3">
-                    <!-- Kartu 1: Nutrisi Lengkap -->
-                    <div class="bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-4 border-l-4 border-green-600">
-                        <div class="flex items-start gap-3">
-                            <div class="text-2xl">??</div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-gray-900 text-sm">Nutrisi Lengkap</h4>
-                                <p class="text-gray-700 text-xs mt-1">Mengandung vitamin, mineral, dan protein esensial</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kartu 2: Daya Tahan Tubuh -->
-                    <div class="bg-gradient-to-br from-yellow-100 to-yellow-50 rounded-lg p-4 border-l-4 border-yellow-600">
-                        <div class="flex items-start gap-3">
-                            <div class="text-2xl">??</div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-gray-900 text-sm">Daya Tahan Tubuh</h4>
-                                <p class="text-gray-700 text-xs mt-1">Meningkatkan sistem imun dengan antioksidan tinggi</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kartu 3: Kesehatan Tulang -->
-                    <div class="bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-4 border-l-4 border-orange-600">
-                        <div class="flex items-start gap-3">
-                            <div class="text-2xl">??</div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-gray-900 text-sm">Kesehatan Tulang</h4>
-                                <p class="text-gray-700 text-xs mt-1">Kaya kalsium untuk tulang dan gigi yang kuat</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Grafik Statistik (Statis/Mockup) -->
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">Statistik Penggunaan</h3>
-                <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                    <svg class="w-full h-40" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Grid lines -->
-                        <line x1="30" y1="130" x2="280" y2="130" stroke="#e5e7eb" stroke-width="1"/>
-                        <line x1="30" y1="100" x2="280" y2="100" stroke="#e5e7eb" stroke-width="1"/>
-                        <line x1="30" y1="70" x2="280" y2="70" stroke="#e5e7eb" stroke-width="1"/>
-                        <line x1="30" y1="40" x2="280" y2="40" stroke="#e5e7eb" stroke-width="1"/>
-
-                        <!-- Bars -->
-                        <rect x="50" y="100" width="30" height="30" fill="#10b981" opacity="0.8"/>
-                        <rect x="90" y="80" width="30" height="50" fill="#10b981" opacity="0.8"/>
-                        <rect x="130" y="60" width="30" height="70" fill="#10b981" opacity="0.8"/>
-                        <rect x="170" y="75" width="30" height="55" fill="#10b981" opacity="0.8"/>
-                        <rect x="210" y="50" width="30" height="80" fill="#10b981" opacity="0.8"/>
-                        <rect x="250" y="85" width="20" height="45" fill="#10b981" opacity="0.8"/>
-
-                        <!-- Axis -->
-                        <line x1="30" y1="30" x2="30" y2="130" stroke="#6b7280" stroke-width="2"/>
-                        <line x1="30" y1="130" x2="280" y2="130" stroke="#6b7280" stroke-width="2"/>
+        <section id="home-screen" class="hidden flex-col flex-1 bg-[#dcfce7] relative h-screen max-h-screen">
+            
+            <div class="absolute top-0 left-0 w-full h-[13rem] flex flex-col items-center justify-center z-0 pointer-events-none">
+                <img id="home-dynamic-logo" src="" alt="Kelor.in" class="w-36 h-36 object-contain hidden mb-1 drop-shadow-md">
+                <div id="home-default-logo" class="flex flex-col items-center drop-shadow-sm transform scale-110">
+                    <svg class="w-16 h-16 text-green-600 mb-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
                     </svg>
-                    <div class="flex justify-between text-xs text-gray-500 mt-2">
-                        <span>Sen</span>
-                        <span>Sel</span>
-                        <span>Rab</span>
-                        <span>Kam</span>
-                        <span>Jum</span>
-                        <span>Sab</span>
+                    <h1 class="text-4xl font-extrabold text-green-800 tracking-tight">kelor<span class="text-orange-500">.in</span></h1>
+                    <p class="text-[10px] font-bold text-green-700 mt-1 uppercase tracking-widest opacity-80">Platform Agritech Kelor</p>
+                </div>
+            </div>
+
+            <div id="home-scroll-container" class="absolute inset-0 overflow-y-auto z-10 w-full hide-scrollbar" style="padding-top: 13rem;">
+                <div id="home-white-layer" class="bg-white min-h-screen rounded-t-[2.5rem] px-6 py-8 pb-28 shadow-[0_-15px_30px_-5px_rgba(0,0,0,0.1)] flex flex-col gap-8 transition-[border-radius] duration-300 ease-in-out">
+                    
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-1">Ringkasan Sistem</p>
+                            <h2 class="text-2xl font-extrabold text-gray-800 tracking-tight">Dashboard</h2>
+                        </div>
+                        
+                        <img id="home-avatar-img" src="" class="w-10 h-10 rounded-xl object-cover hidden border border-green-100 shadow-sm">
+                        <div id="home-avatar-text" class="w-10 h-10 bg-green-50 text-green-700 rounded-xl flex items-center justify-center font-bold border border-green-100 shadow-sm">
+                            US
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Khasiat Ekstrak Kelor
+                        </h3>
+                        <div id="benefits-carousel" class="flex gap-4 overflow-x-auto hide-scrollbar pb-2 snap-x snap-mandatory">
+                            <div class="min-w-full bg-gradient-to-br from-green-50 to-white rounded-3xl p-6 min-h-[160px] border border-green-100 shadow-sm snap-center flex flex-col justify-center gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl border border-green-200 flex-shrink-0">🌿</div>
+                                    <h4 class="font-bold text-gray-800 text-lg">Super Nutrisi</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm leading-relaxed">Kaya akan vitamin & mineral esensial untuk menjaga vitalitas tubuh tetap optimal.</p>
+                            </div>
+                            <div class="min-w-full bg-gradient-to-br from-orange-50 to-white rounded-3xl p-6 min-h-[160px] border border-orange-100 shadow-sm snap-center flex flex-col justify-center gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl border border-orange-200 flex-shrink-0">🛡️</div>
+                                    <h4 class="font-bold text-gray-800 text-lg">Sistem Imun</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm leading-relaxed">Kandungan antioksidan aktif yang berfungsi menetralisir radikal bebas dalam darah.</p>
+                            </div>
+                            <div class="min-w-full bg-gradient-to-br from-blue-50 to-white rounded-3xl p-6 min-h-[160px] border border-blue-100 shadow-sm snap-center flex flex-col justify-center gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl border border-blue-200 flex-shrink-0">🦴</div>
+                                    <h4 class="font-bold text-gray-800 text-lg">Tulang Kuat</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm leading-relaxed">Sumber kalsium alami yang terbukti menjaga kepadatan tulang dan gigi pengguna.</p>
+                            </div>
+                        </div>
+                        <div id="carousel-indicators" class="flex justify-center gap-2 mt-4">
+                            <div class="w-2 h-2 rounded-full bg-green-500 transition-colors duration-300"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-200 transition-colors duration-300"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-200 transition-colors duration-300"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-3">Tingkat Penyerapan Nutrisi</h3>
+                        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                            <svg class="w-full h-32" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="20" y1="100" x2="290" y2="100" stroke="#f3f4f6" stroke-width="1"/>
+                                <line x1="20" y1="75" x2="290" y2="75" stroke="#f3f4f6" stroke-width="1"/>
+                                <line x1="20" y1="50" x2="290" y2="50" stroke="#f3f4f6" stroke-width="1"/>
+                                <line x1="20" y1="25" x2="290" y2="25" stroke="#f3f4f6" stroke-width="1"/>
+                                <path d="M 30 90 L 80 60 L 130 70 L 180 30 L 230 40 L 280 15" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M 30 90 L 80 60 L 130 70 L 180 30 L 230 40 L 280 15 L 280 100 L 30 100 Z" fill="url(#grad1)" opacity="0.15"/>
+                                <defs>
+                                    <linearGradient id="grad1" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#16a34a"/>
+                                        <stop offset="100%" stop-color="#ffffff"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="30" cy="90" r="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                                <circle cx="80" cy="60" r="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                                <circle cx="130" cy="70" r="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                                <circle cx="180" cy="30" r="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                                <circle cx="230" cy="40" r="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                                <circle cx="280" cy="15" r="4" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+                            </svg>
+                            <div class="flex justify-between text-[10px] text-gray-400 font-bold uppercase mt-3 px-2">
+                                <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center justify-between">
+                            Riwayat Pemindaian
+                            <span class="text-[10px] font-bold text-green-600 uppercase cursor-pointer hover:underline">Lihat Semua</span>
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-3 rounded-2xl border border-gray-100 bg-white shadow-sm">
+                                <div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center font-extrabold text-xs border border-green-100">98%</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-gray-800 text-sm">Daun Kelor Muda</h4>
+                                    <p class="text-[10px] text-gray-400 font-medium mt-0.5">Hari ini, 10:30 WIB</p>
+                                </div>
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded">Optimal</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-2xl border border-gray-100 bg-white shadow-sm">
+                                <div class="w-10 h-10 bg-yellow-50 text-yellow-600 rounded-xl flex items-center justify-center font-extrabold text-xs border border-yellow-100">75%</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-gray-800 text-sm">Kelor Dewasa</h4>
+                                    <p class="text-[10px] text-gray-400 font-medium mt-0.5">Kemarin, 14:15 WIB</p>
+                                </div>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-[10px] font-bold rounded">Cukup</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scan-screen" class="hidden flex-col flex-1 pb-20 bg-gray-50">
+            <div id="scan-menu" class="p-4 flex flex-col h-full animate-fade-in">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center mb-6 mt-4">
+                    <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Deteksi Daun Kelor</h2>
+                    <p class="text-gray-500 text-sm mb-6">Pindai daun secara real-time atau unggah foto dari galeri untuk analisis nutrisi.</p>
+                    
+                    <div class="space-y-3">
+                        <button id="btn-open-camera" class="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition shadow-md shadow-green-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                                <circle cx="17.25" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
+                            </svg>
+                            Buka Kamera
+                        </button>
+                        <button id="btn-upload-foto" class="w-full flex items-center justify-center gap-2 bg-white border-2 border-green-600 text-green-700 hover:bg-green-50 font-semibold py-3 px-4 rounded-xl transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            Unggah Gambar
+                        </button>
+                        <input type="file" id="file-upload-input" accept="image/*" class="hidden">
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100 mt-auto">
+                    <h3 class="font-bold text-blue-900 text-sm mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        Tips Hasil Maksimal:
+                    </h3>
+                    <ul class="text-xs text-blue-800 space-y-2 pl-2">
+                        <li class="flex items-start gap-2"><span>•</span> Pastikan pencahayaan terang dan merata.</li>
+                        <li class="flex items-start gap-2"><span>•</span> Jarak ideal lensa ke daun adalah 10-15 cm.</li>
+                        <li class="flex items-start gap-2"><span>•</span> Hindari bayangan tangan yang menutupi daun.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="active-camera-view" class="hidden fixed inset-0 z-[100] bg-black">
+                <div class="absolute top-0 left-0 w-full flex justify-between items-center p-6 z-50 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
+                    <button id="btn-close-camera" class="pointer-events-auto text-white p-2 bg-white/20 rounded-full backdrop-blur-sm active:scale-95 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <p class="text-white text-sm font-medium drop-shadow-md">Fokuskan pada Daun</p>
+                    <div class="w-10"></div> 
+                </div>
+
+                <div class="absolute inset-0 flex items-center justify-center p-4 pt-24 pb-36 z-40">
+                    <div class="relative w-full max-w-sm h-full max-h-[65vh] border-2 border-green-500 rounded-3xl overflow-hidden shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                        <video id="camera-feed" class="absolute inset-0 w-full h-full object-cover hidden" autoplay playsinline></video>
+                        
+                        <div class="absolute top-0 left-0 w-10 h-10 border-t-4 border-l-4 border-green-500 rounded-tl-xl z-10 m-4"></div>
+                        <div class="absolute top-0 right-0 w-10 h-10 border-t-4 border-r-4 border-green-500 rounded-tr-xl z-10 m-4"></div>
+                        <div class="absolute bottom-0 left-0 w-10 h-10 border-b-4 border-l-4 border-green-500 rounded-bl-xl z-10 m-4"></div>
+                        <div class="absolute bottom-0 right-0 w-10 h-10 border-b-4 border-r-4 border-green-500 rounded-br-xl z-10 m-4"></div>
+
+                        <div class="absolute inset-0 overflow-hidden z-10 pointer-events-none">
+                            <div class="absolute w-full h-[2px] bg-green-400 opacity-80 animate-pulse" style="top: 50%; box-shadow: 0 0 15px #4ade80; animation: scan-line 2.5s infinite linear;"></div>
+                        </div>
+                        
+                        <div id="mockup-leaf" class="absolute inset-0 flex items-center justify-center z-0 bg-gray-900">
+                            <div class="text-6xl animate-pulse">🌿</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-0 left-0 w-full h-36 flex items-center justify-center pb-6 bg-gradient-to-t from-black/80 to-transparent z-50">
+                    <button id="shutter-btn" class="w-20 h-20 rounded-full bg-transparent border-4 border-white flex items-center justify-center active:scale-90 transition transform shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="flash-effect" class="fixed inset-0 bg-white opacity-0 pointer-events-none z-[150] hidden transition-opacity duration-75"></div>
+        </section>
+
+        <section id="chat-screen" class="hidden p-4 pb-20 overflow-y-auto flex-1 flex flex-col">
+            <div class="flex items-center justify-between mb-6 pt-4 sticky top-0 bg-gray-50 z-10">
+                <h2 class="text-2xl font-bold text-gray-900">Tanya Pakar</h2>
+                <button class="text-gray-600 hover:text-gray-900 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-2 flex-1">
+                <div class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition cursor-pointer">
+                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        👨‍⚕️
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-gray-900 text-sm">Dr. Botani</p>
+                        <p class="text-gray-600 text-xs truncate">Bagaimana cara menyimpan daun kelor agar tahan lama?</p>
+                        <p class="text-gray-400 text-xs mt-1">10 menit yang lalu</p>
+                    </div>
+                    <div class="w-2 h-2 bg-green-600 rounded-full flex-shrink-0"></div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition cursor-pointer">
+                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        👩‍⚕️
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-gray-900 text-sm">Ahli Nutrisi Mita</p>
+                        <p class="text-gray-600 text-xs truncate">Berapa takaran daun kelor yang aman dikonsumsi setiap hari?</p>
+                        <p class="text-gray-400 text-xs mt-1">1 jam yang lalu</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition cursor-pointer">
+                    <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        👨‍💼
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-gray-900 text-sm">Konsultan Kesehatan Adi</p>
+                        <p class="text-gray-600 text-xs truncate">Apakah ada efek samping dari konsumsi kelor jangka panjang?</p>
+                        <p class="text-gray-400 text-xs mt-1">3 jam yang lalu</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile-screen" class="hidden pb-20 overflow-y-auto flex-1 flex flex-col bg-gray-50">
+            <div class="bg-green-700 px-6 py-8 text-white shadow-sm z-10">
+                <div class="flex items-center gap-4">
+                    
+                    <img id="profile-avatar-img" src="" class="w-16 h-16 rounded-md object-cover hidden border border-white/20 shadow-sm">
+                    <div id="profile-avatar-text" class="w-16 h-16 bg-white/10 rounded-md flex items-center justify-center text-2xl font-bold border border-white/20">
+                        US
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xl font-bold tracking-wide">Petani Advan</h2>
+                        <p class="text-green-100 text-sm font-medium">Kelor.in</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Riwayat Scan Terbaru -->
-            <div>
-                <h3 class="text-lg font-bold text-gray-900 mb-4">Riwayat Scan Terbaru</h3>
-                <div class="space-y-3">
-                    <!-- Scan Item 1 -->
-                    <div class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            ??
+            <div class="px-4 py-6 flex-1 flex flex-col">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 ml-1">Pengaturan</h3>
+                
+                <div class="bg-white border border-gray-200 rounded-md shadow-sm mb-6">
+                    <div class="p-5 border-b border-gray-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Kustomisasi Visual</h4>
+                                <p class="text-xs text-gray-500 mt-1">Ubah logo utama pada layar otentikasi (Maks. 2MB, Rasio 1:1)</p>
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-900 text-sm">Daun Kelor Segar</p>
-                            <p class="text-gray-500 text-xs">Hari ini, 10:30 AM</p>
+                        
+                        <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-md border border-gray-200">
+                            <img id="profile-logo-preview" src="" class="w-12 h-12 object-contain hidden border border-gray-300 rounded bg-white shadow-sm">
+                            <div id="profile-logo-placeholder" class="w-12 h-12 bg-green-50 text-green-700 flex items-center justify-center font-bold rounded border border-green-200 text-xs shadow-sm">Kelor</div>
+                            
+                            <div class="flex-1">
+                                <label for="logo-upload-input" class="cursor-pointer inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto shadow-sm">
+                                    Upload Logo Baru
+                                </label>
+                                <input type="file" id="logo-upload-input" accept="image/png, image/jpeg" class="hidden">
+                            </div>
                         </div>
-                        <div class="text-green-600 font-bold text-lg">?</div>
-                    </div>
-
-                    <!-- Scan Item 2 -->
-                    <div class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition">
-                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            ??
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-900 text-sm">Biji Kelor</p>
-                            <p class="text-gray-500 text-xs">Kemarin, 3:45 PM</p>
-                        </div>
-                        <div class="text-green-600 font-bold text-lg">?</div>
-                    </div>
-
-                    <!-- Scan Item 3 -->
-                    <div class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition">
-                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            ??
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-900 text-sm">Daun Muda</p>
-                            <p class="text-gray-500 text-xs">2 hari yang lalu</p>
-                        </div>
-                        <div class="text-green-600 font-bold text-lg">?</div>
+                        
+                        <button id="btn-reset-logo" class="mt-4 text-xs text-red-600 hover:text-red-800 font-semibold hidden flex items-center gap-1 transition">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            Hapus Parameter Logo
+                        </button>
                     </div>
                 </div>
+
+                <button id="btn-logout" class="mt-auto w-full bg-white text-red-600 hover:bg-red-50 font-bold py-3 rounded-md border border-gray-200 transition shadow-sm flex justify-center items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Logout
+                </button>
             </div>
         </section>
 
