@@ -12,6 +12,8 @@ const homeScreen = document.getElementById('home-screen');
 const scanScreen = document.getElementById('scan-screen');
 const chatScreen = document.getElementById('chat-screen');
 const profileScreen = document.getElementById('profile-screen');
+const pesananScreen = document.getElementById('pesanan-screen');
+const stokScreen = document.getElementById('stok-screen');
 
 // Navbar
 const bottomNavbar = document.getElementById('bottom-navbar');
@@ -45,7 +47,6 @@ const profileLogoPreview = document.getElementById('profile-logo-preview');
 const profileLogoPlaceholder = document.getElementById('profile-logo-placeholder');
 const logoUploadInput = document.getElementById('logo-upload-input');
 const btnResetLogo = document.getElementById('btn-reset-logo');
-const btnLogout = document.getElementById('btn-logout');
 
 const homeDynamicLogo = document.getElementById('home-dynamic-logo');
 const homeDefaultLogo = document.getElementById('home-default-logo');
@@ -59,6 +60,8 @@ const homeAvatarImg = document.getElementById('home-avatar-img');
 const homeAvatarText = document.getElementById('home-avatar-text');
 const profileAvatarImg = document.getElementById('profile-avatar-img');
 const profileAvatarText = document.getElementById('profile-avatar-text');
+const avatarUploadInput = document.getElementById('avatar-upload-input');
+const avatarUploadTrigger = document.getElementById('avatar-upload-trigger');
 
 // =============================================================================
 // 2. UTILITY FUNCTIONS
@@ -68,11 +71,11 @@ const profileAvatarText = document.getElementById('profile-avatar-text');
  * Menyembunyikan semua screen utama
  */
 function hideAllScreens() {
-  const screens = [loginScreen, homeScreen, scanScreen, chatScreen, profileScreen];
+  const screens = [loginScreen, homeScreen, scanScreen, chatScreen, profileScreen, pesananScreen, stokScreen];
   screens.forEach(s => {
     if (s) {
       s.classList.add('hidden');
-      s.style.display = ''; // Reset inline style agar hidden class bekerja
+      s.style.display = '';
     }
   });
   scanScreen.classList.remove('flex');
@@ -89,8 +92,7 @@ function showScreen(screenId) {
   if (screen) {
     screen.classList.remove('hidden');
     // Semua screen utama butuh display flex agar layout flex-col bekerja
-    if (screenId === 'home-screen' || screenId === 'scan-screen' || 
-        screenId === 'chat-screen' || screenId === 'profile-screen') {
+    if (['home-screen', 'scan-screen', 'chat-screen', 'profile-screen', 'pesanan-screen', 'stok-screen'].includes(screenId)) {
       screen.style.display = 'flex';
     }
   }
@@ -461,26 +463,362 @@ btnResetLogo.addEventListener('click', () => {
 });
 
 // Event Listener Logout
-btnLogout.addEventListener('click', () => {
-    Swal.fire({
-        title: 'Keluar dari aplikasi?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Keluar',
-        cancelButtonText: 'Batal',
-        confirmButtonColor: '#ef4444' // Warna merah untuk logout
-    }).then((result) => {
-        if (result.isConfirmed) {
-            showScreen('login-screen');
-            bottomNavbar.classList.add('hidden');
+const btnLogout = document.getElementById('btn-logout');
+if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+        Swal.fire({
+            title: 'Keluar dari aplikasi?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Keluar',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                showScreen('login-screen');
+                bottomNavbar.classList.add('hidden');
+            }
+        });
+    });
+}
+
+// =============================================================================
+// 6b. LOGIKA PROFIL SCREEN - EDIT PROFIL, UPLOAD SERTIFIKASI, RATING
+// =============================================================================
+
+// -- Helper: buka/tutup modal bottom-sheet --
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+// -- Tombol Edit Profil --
+const btnEditProfil = document.getElementById('btn-edit-profil');
+if (btnEditProfil) {
+    btnEditProfil.addEventListener('click', () => {
+        // Isi input dengan nilai saat ini dari header
+        const currentName = document.getElementById('profile-display-name');
+        const currentLoc  = document.getElementById('profile-display-location');
+        const inputNama   = document.getElementById('input-profil-nama');
+        const inputLokasi = document.getElementById('input-profil-lokasi');
+        if (inputNama && currentName)   inputNama.value   = currentName.textContent;
+        if (inputLokasi && currentLoc)  inputLokasi.value = currentLoc.textContent;
+        openModal('modal-edit-profil');
+    });
+}
+
+// -- Simpan perubahan profil --
+const btnSimpanProfil = document.getElementById('btn-simpan-profil');
+if (btnSimpanProfil) {
+    btnSimpanProfil.addEventListener('click', () => {
+        const nama   = document.getElementById('input-profil-nama')?.value.trim();
+        const lokasi = document.getElementById('input-profil-lokasi')?.value.trim();
+
+        if (!nama) {
+            Swal.fire({ icon: 'warning', title: 'Nama kosong', text: 'Mohon isi nama terlebih dahulu.', confirmButtonText: 'Oke' });
+            return;
         }
+
+        // Update tampilan header profil
+        const dispName = document.getElementById('profile-display-name');
+        const dispLoc  = document.getElementById('profile-display-location');
+        if (dispName) dispName.textContent = nama;
+        if (dispLoc && lokasi) dispLoc.textContent = lokasi;
+
+        // Simpan ke localStorage
+        localStorage.setItem('kelorin_profil_nama', nama);
+        if (lokasi) localStorage.setItem('kelorin_profil_lokasi', lokasi);
+
+        closeModal('modal-edit-profil');
+        Swal.fire({ icon: 'success', title: 'Profil diperbarui!', timer: 1400, showConfirmButton: false });
+    });
+}
+
+// -- Tutup modal edit profil --
+const btnModalProfilClose = document.getElementById('modal-profil-close');
+if (btnModalProfilClose) {
+    btnModalProfilClose.addEventListener('click', () => closeModal('modal-edit-profil'));
+}
+// Tap backdrop untuk tutup
+document.getElementById('modal-edit-profil')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal('modal-edit-profil');
+});
+
+// -- Tombol Upload Sertifikasi --
+const btnUploadSertifikasi  = document.getElementById('btn-upload-sertifikasi');
+const sertifikasiUploadInput = document.getElementById('sertifikasi-upload-input');
+if (btnUploadSertifikasi && sertifikasiUploadInput) {
+    btnUploadSertifikasi.addEventListener('click', () => sertifikasiUploadInput.click());
+
+    sertifikasiUploadInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5000000) {
+            Swal.fire({ icon: 'warning', title: 'File Terlalu Besar', text: 'Maksimal ukuran sertifikasi adalah 5MB.' });
+            this.value = '';
+            return;
+        }
+        Swal.fire({
+            title: 'Mengunggah Sertifikasi...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => Swal.showLoading()
+        });
+        setTimeout(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sertifikasi Diunggah!',
+                text: `File "${file.name}" berhasil disimpan. Sertifikasi akan muncul di profil publik Anda.`,
+                confirmButtonText: 'Oke'
+            });
+            sertifikasiUploadInput.value = '';
+        }, 1500);
+    });
+}
+
+// -- Tombol Rating & Ulasan --
+const btnRatingUlasan = document.getElementById('btn-rating-ulasan');
+if (btnRatingUlasan) {
+    btnRatingUlasan.addEventListener('click', () => openModal('modal-rating-ulasan'));
+}
+
+// -- Tutup modal rating --
+document.getElementById('modal-rating-close')?.addEventListener('click', () => closeModal('modal-rating-ulasan'));
+document.getElementById('modal-rating-ulasan')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal('modal-rating-ulasan');
+});
+
+// Lokasi: Lomba Poster - V2/app.js
+// =============================================================================
+// MANAJEMEN AVATAR GLOBAL
+// =============================================================================
+
+function applyAvatarToUI(base64Image) {
+    if (base64Image) {
+        if (homeAvatarImg && homeAvatarText) {
+            homeAvatarImg.src = base64Image;
+            homeAvatarImg.classList.remove('hidden');
+            homeAvatarText.classList.add('hidden');
+        }
+        if (profileAvatarImg && profileAvatarText) {
+            profileAvatarImg.src = base64Image;
+            profileAvatarImg.classList.remove('hidden');
+            profileAvatarText.classList.add('hidden');
+        }
+    } else {
+        if (homeAvatarImg && homeAvatarText) {
+            homeAvatarImg.src = '';
+            homeAvatarImg.classList.add('hidden');
+            homeAvatarText.classList.remove('hidden');
+        }
+        if (profileAvatarImg && profileAvatarText) {
+            profileAvatarImg.src = '';
+            profileAvatarImg.classList.add('hidden');
+            profileAvatarText.classList.remove('hidden');
+        }
+    }
+}
+
+if (avatarUploadTrigger && avatarUploadInput) {
+    avatarUploadTrigger.addEventListener('click', () => {
+        avatarUploadInput.click();
+    });
+
+    avatarUploadInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 2000000) {
+                Swal.fire({ icon: 'warning', title: 'File Terlalu Besar', text: 'Maksimal ukuran foto profil adalah 2MB.' });
+                this.value = '';
+                return;
+            }
+            Swal.fire({
+                title: 'Menyinkronkan Avatar...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const base64Image = event.target.result;
+                localStorage.setItem('kelorin_user_avatar', base64Image); 
+                applyAvatarToUI(base64Image);
+                setTimeout(() => {
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Avatar diperbarui di seluruh sistem.', timer: 1500, showConfirmButton: false });
+                }, 400); 
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// =============================================================================
+// 7. GRAFIK PENJUALAN INTERAKTIF
+// =============================================================================
+
+const salesChartData = {
+    minggu_ini: {
+        labels: ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'],
+        values: [20, 35, 28, 45, 38, 50],
+    },
+    minggu_lalu: {
+        labels: ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'],
+        values: [15, 22, 18, 30, 25, 35],
+    },
+    dua_minggu_lalu: {
+        labels: ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'],
+        values: [10, 18, 22, 28, 20, 32],
+    },
+};
+
+function renderSalesChart(period) {
+    const data = salesChartData[period];
+    const container = document.getElementById('sales-chart-container');
+    const tooltip = document.getElementById('chart-tooltip');
+    const xLabelsEl = document.getElementById('chart-x-labels');
+    if (!container || !data) return;
+
+    const W = 320, H = 130;
+    const padL = 38, padR = 10, padT = 10, padB = 8;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+    const maxVal = 50;
+    const ySteps = [0, 10, 20, 30, 40, 50];
+    const values = data.values;
+    const n = values.length;
+
+    // Kalkulasi posisi titik
+    const points = values.map((v, i) => ({
+        x: padL + (i / (n - 1)) * chartW,
+        y: padT + chartH - (v / maxVal) * chartH,
+        value: v,
+        label: data.labels[i],
+    }));
+
+    // Path garis dan area
+    const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    const areaD = `${pathD} L ${points[n - 1].x.toFixed(1)} ${(padT + chartH).toFixed(1)} L ${points[0].x.toFixed(1)} ${(padT + chartH).toFixed(1)} Z`;
+
+    // Grid dan label Y-axis
+    const yGrid = ySteps.map(step => {
+        const y = padT + chartH - (step / maxVal) * chartH;
+        return `
+            <line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" stroke="#f3f4f6" stroke-width="1"/>
+            <text x="${padL - 4}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" font-size="7" fill="#9ca3af" font-weight="700">${step}kg</text>
+        `;
+    }).join('');
+
+    // Titik-titik data
+    const circles = points.map(p => `
+        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5" fill="#fff" stroke="#16a34a" stroke-width="2.5"
+            class="chart-point" data-value="${p.value}" data-label="${p.label}"
+            style="cursor:pointer; transition: r 0.15s ease;"/>
+    `).join('');
+
+    container.innerHTML = `
+        <svg class="w-full" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+            <defs>
+                <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#16a34a"/>
+                    <stop offset="100%" stop-color="#ffffff"/>
+                </linearGradient>
+            </defs>
+            ${yGrid}
+            <path d="${areaD}" fill="url(#salesGrad)" opacity="0.12"/>
+            <path d="${pathD}" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            ${circles}
+        </svg>
+    `;
+
+    // Label X-axis
+    if (xLabelsEl) {
+        xLabelsEl.innerHTML = data.labels.map(l => `<span>${l}</span>`).join('');
+    }
+
+    // Tooltip interaktif
+    container.querySelectorAll('.chart-point').forEach(circle => {
+        const showTip = () => {
+            const svgEl = container.querySelector('svg');
+            const svgRect = svgEl.getBoundingClientRect();
+            const vb = svgEl.viewBox.baseVal;
+            const scaleX = svgRect.width / vb.width;
+            const scaleY = svgRect.height / vb.height;
+            const cx = parseFloat(circle.getAttribute('cx'));
+            const cy = parseFloat(circle.getAttribute('cy'));
+            const val = circle.getAttribute('data-value');
+            const lbl = circle.getAttribute('data-label');
+
+            tooltip.innerHTML = `${lbl}: <span style="color:#4ade80">${val} kg</span>`;
+            tooltip.style.left = (cx * scaleX) + 'px';
+            tooltip.style.top = (cy * scaleY) + 'px';
+            tooltip.classList.remove('hidden');
+            circle.setAttribute('r', '6');
+        };
+        const hideTip = () => {
+            tooltip.classList.add('hidden');
+            circle.setAttribute('r', '5');
+        };
+
+        circle.addEventListener('mouseenter', showTip);
+        circle.addEventListener('mouseleave', hideTip);
+        circle.addEventListener('touchstart', (e) => { e.preventDefault(); showTip(); }, { passive: false });
+        circle.addEventListener('touchend', hideTip);
+    });
+}
+
+// Sort By handler
+const chartSortSelect = document.getElementById('chart-sort-select');
+if (chartSortSelect) {
+    chartSortSelect.addEventListener('change', () => {
+        renderSalesChart(chartSortSelect.value);
+    });
+}
+
+// =============================================================================
+// 8. NAVIGASI BARU - PESANAN & STOK
+// =============================================================================
+
+// Tombol "Lihat Semua" di card Pesanan Masuk (home screen)
+const lihatSemuaPesanan = document.getElementById('lihat-semua-pesanan');
+if (lihatSemuaPesanan) {
+    lihatSemuaPesanan.addEventListener('click', () => {
+        showScreen('pesanan-screen');
+        updateNavbarIndicator('pesanan-screen');
+    });
+}
+
+// Tombol eye (👁) di tiap card pesanan masuk
+document.querySelectorAll('.nav-to-pesanan').forEach(btn => {
+    btn.addEventListener('click', () => {
+        showScreen('pesanan-screen');
+        updateNavbarIndicator('pesanan-screen');
     });
 });
 
+// Tombol gear di card Stok (home screen)
+const btnKelolaStok = document.getElementById('btn-kelola-stok');
+if (btnKelolaStok) {
+    btnKelolaStok.addEventListener('click', () => {
+        showScreen('stok-screen');
+        updateNavbarIndicator('stok-screen');
+    });
+}
+
 // =============================================================================
-// 7. INITIALIZATION - SETUP AWAL APLIKASI
+// 9. INITIALIZATION - SETUP AWAL APLIKASI
 // =============================================================================
 
+// Lokasi: Lomba Poster - V2/app.js
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🌱 Kelor.in App - Initialized');
 
@@ -488,15 +826,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedLogo = localStorage.getItem('kelorin_custom_logo');
   applyLogoToUI(savedLogo);
   
+  const savedAvatar = localStorage.getItem('kelorin_user_avatar');
+  applyAvatarToUI(savedAvatar);
+
+  // Pulihkan nama & lokasi profil yang pernah disimpan
+  const savedNama   = localStorage.getItem('kelorin_profil_nama');
+  const savedLokasi = localStorage.getItem('kelorin_profil_lokasi');
+  if (savedNama) {
+      const el = document.getElementById('profile-display-name');
+      if (el) el.textContent = savedNama;
+  }
+  if (savedLokasi) {
+      const el = document.getElementById('profile-display-location');
+      if (el) el.textContent = savedLokasi;
+  }
+
   // State awal: sembunyikan semua, tampilkan login
   hideAllScreens();
   loginScreen.classList.remove('hidden');
   loginScreen.style.display = 'flex';
   bottomNavbar.classList.add('hidden');
+
+  // Render chart awal (Minggu Ini)
+  renderSalesChart('minggu_ini');
   
   console.log('✅ UI initialized - Waiting for user login...');
 });
 
 // =============================================================================
-// END OF APP.JS
+// END OF APP.JS - v2.1 (Pesanan, Stok, Grafik Penjualan Interaktif)
 // =============================================================================
