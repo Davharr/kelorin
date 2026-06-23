@@ -47,6 +47,19 @@ const logoUploadInput = document.getElementById('logo-upload-input');
 const btnResetLogo = document.getElementById('btn-reset-logo');
 const btnLogout = document.getElementById('btn-logout');
 
+const homeDynamicLogo = document.getElementById('home-dynamic-logo');
+const homeDefaultLogo = document.getElementById('home-default-logo');
+const homeScrollContainer = document.getElementById('home-scroll-container');
+const homeWhiteLayer = document.getElementById('home-white-layer');
+const benefitsCarousel = document.getElementById('benefits-carousel');
+const carouselIndicators = document.getElementById('carousel-indicators');
+
+// Avatar Elements
+const homeAvatarImg = document.getElementById('home-avatar-img');
+const homeAvatarText = document.getElementById('home-avatar-text');
+const profileAvatarImg = document.getElementById('profile-avatar-img');
+const profileAvatarText = document.getElementById('profile-avatar-text');
+
 // =============================================================================
 // 2. UTILITY FUNCTIONS
 // =============================================================================
@@ -55,12 +68,14 @@ const btnLogout = document.getElementById('btn-logout');
  * Menyembunyikan semua screen utama
  */
 function hideAllScreens() {
-  loginScreen.classList.add('hidden');
-  homeScreen.classList.add('hidden');
-  scanScreen.classList.add('hidden');
-  scanScreen.classList.remove('flex'); // Pembersihan khusus scan
-  chatScreen.classList.add('hidden');
-  profileScreen.classList.add('hidden'); // Tambahan baru
+  const screens = [loginScreen, homeScreen, scanScreen, chatScreen, profileScreen];
+  screens.forEach(s => {
+    if (s) {
+      s.classList.add('hidden');
+      s.style.display = ''; // Reset inline style agar hidden class bekerja
+    }
+  });
+  scanScreen.classList.remove('flex');
 }
 
 /**
@@ -73,8 +88,11 @@ function showScreen(screenId) {
   const screen = document.getElementById(screenId);
   if (screen) {
     screen.classList.remove('hidden');
-    // Jika itu scan-screen, pastikan defaultnya flex
-    if(screenId === 'scan-screen') screen.classList.add('flex');
+    // Semua screen utama butuh display flex agar layout flex-col bekerja
+    if (screenId === 'home-screen' || screenId === 'scan-screen' || 
+        screenId === 'chat-screen' || screenId === 'profile-screen') {
+      screen.style.display = 'flex';
+    }
   }
 
   // Safety Protocol: Matikan hardware kamera dan reset UI scan ke Menu
@@ -106,6 +124,53 @@ function updateNavbarIndicator(targetScreenId) {
   });
 }
 
+/**
+ * Event Listener untuk efek parallax border-radius di Home Screen
+ * Layer putih naik ketika di-scroll, background hijau/logo tetap diam
+ */
+if (homeScrollContainer && homeWhiteLayer) {
+    homeScrollContainer.addEventListener('scroll', () => {
+        // Threshold kecil (20px) agar efek terasa responsif
+        const scrolled = homeScrollContainer.scrollTop;
+        if (scrolled > 20) {
+            homeWhiteLayer.classList.remove('rounded-t-[2.5rem]');
+            homeWhiteLayer.classList.add('rounded-t-none');
+        } else {
+            homeWhiteLayer.classList.add('rounded-t-[2.5rem]');
+            homeWhiteLayer.classList.remove('rounded-t-none');
+        }
+    }, { passive: true });
+}
+
+/**
+ * Event Listener untuk logika sinkronisasi Carousel & Indikator
+ */
+if (benefitsCarousel && carouselIndicators) {
+    const dots = carouselIndicators.children;
+    
+    benefitsCarousel.addEventListener('scroll', () => {
+        const scrollPosition = benefitsCarousel.scrollLeft;
+        const cardWidth = benefitsCarousel.clientWidth;
+        
+        // Mencegah pembagian dengan nol jika UI belum dirender browser
+        if (cardWidth === 0) return;
+        
+        // Kalkulasi indeks slide aktif (dibulatkan ke kartu terdekat)
+        const activeIndex = Math.round(scrollPosition / cardWidth);
+        
+        // Manipulasi warna indikator berdasarkan state
+        for (let i = 0; i < dots.length; i++) {
+            if (i === activeIndex) {
+                dots[i].classList.remove('bg-gray-200');
+                dots[i].classList.add('bg-green-500');
+            } else {
+                dots[i].classList.remove('bg-green-500');
+                dots[i].classList.add('bg-gray-200');
+            }
+        }
+    });
+}
+
 // =============================================================================
 // 3. LOGIKA LOGIN
 // =============================================================================
@@ -129,8 +194,7 @@ function handleLogin() {
   }
   
   // Sembunyikan login screen, tampilkan home dan navbar
-  loginScreen.classList.add('hidden');
-  homeScreen.classList.remove('hidden');
+  showScreen('home-screen');
   bottomNavbar.classList.remove('hidden');
   
   // Set indikator navbar ke Home (screen default setelah login)
@@ -140,7 +204,7 @@ function handleLogin() {
   loginInput.value = '';
   loginPassword.value = '';
   
-  console.log('? Login berhasil! Selamat datang.');
+  console.log('✅ Login berhasil! Selamat datang.');
 }
 
 /**
@@ -150,8 +214,7 @@ function handleGoogleLogin() {
   console.log('?? Tombol Google diklik - Simulasi Google Sign-In');
   
   // Tanpa validasi input, langsung login
-  loginScreen.classList.add('hidden');
-  homeScreen.classList.remove('hidden');
+  showScreen('home-screen');
   bottomNavbar.classList.remove('hidden');
   
   // Set indikator navbar ke Home
@@ -161,7 +224,7 @@ function handleGoogleLogin() {
   loginInput.value = '';
   loginPassword.value = '';
   
-  console.log('? Login dengan Google berhasil!');
+  console.log('✅ Login dengan Google berhasil!');
 }
 
 // Event listeners untuk login
@@ -179,15 +242,17 @@ loginPassword.addEventListener('keypress', (e) => {
 // =============================================================================
 // 4. LOGIKA NAVIGASI SPA (BOTTOM NAVBAR)
 // =============================================================================
-
-/**
- * Menangani klik pada tombol navbar
- */
 navButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     const targetScreenId = btn.getAttribute('data-screen');
     showScreen(targetScreenId);
     updateNavbarIndicator(targetScreenId);
+
+    // Otomatis gulir kembali ke paling atas jika menekan tombol Home
+    // Ini mengembalikan bentuk border membulat dan memperlihatkan logo
+    if (targetScreenId === 'home-screen' && homeScrollContainer) {
+        homeScrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   });
 });
 
@@ -323,25 +388,46 @@ shutterBtn.addEventListener('click', () => {
 function applyLogoToUI(base64Image) {
     if (base64Image) {
         // Terapkan ke Layar Login
-        mainAppLogo.src = base64Image;
-        mainAppLogo.classList.remove('hidden');
-        mainAppTitle.classList.add('hidden');
+        if(mainAppLogo) {
+            mainAppLogo.src = base64Image;
+            mainAppLogo.classList.remove('hidden');
+            mainAppTitle.classList.add('hidden');
+        }
         
         // Terapkan ke Layar Profil
-        profileLogoPreview.src = base64Image;
-        profileLogoPreview.classList.remove('hidden');
-        profileLogoPlaceholder.classList.add('hidden');
-        btnResetLogo.classList.remove('hidden');
+        if(profileLogoPreview) {
+            profileLogoPreview.src = base64Image;
+            profileLogoPreview.classList.remove('hidden');
+            profileLogoPlaceholder.classList.add('hidden');
+            btnResetLogo.classList.remove('hidden');
+        }
+
+        // Terapkan ke Layar Home
+        if(homeDynamicLogo) {
+            homeDynamicLogo.src = base64Image;
+            homeDynamicLogo.classList.remove('hidden');
+            homeDefaultLogo.classList.add('hidden');
+        }
     } else {
         // Reset ke teks bawaan
-        mainAppLogo.src = '';
-        mainAppLogo.classList.add('hidden');
-        mainAppTitle.classList.remove('hidden');
+        if(mainAppLogo) {
+            mainAppLogo.src = '';
+            mainAppLogo.classList.add('hidden');
+            mainAppTitle.classList.remove('hidden');
+        }
         
-        profileLogoPreview.src = '';
-        profileLogoPreview.classList.add('hidden');
-        profileLogoPlaceholder.classList.remove('hidden');
-        btnResetLogo.classList.add('hidden');
+        if(profileLogoPreview) {
+            profileLogoPreview.src = '';
+            profileLogoPreview.classList.add('hidden');
+            profileLogoPlaceholder.classList.remove('hidden');
+            btnResetLogo.classList.add('hidden');
+        }
+
+        if(homeDynamicLogo) {
+            homeDynamicLogo.src = '';
+            homeDynamicLogo.classList.add('hidden');
+            homeDefaultLogo.classList.remove('hidden');
+        }
     }
 }
 
@@ -398,19 +484,17 @@ btnLogout.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🌱 Kelor.in App - Initialized');
 
-
   // Panggil logo dari memory lokal
   const savedLogo = localStorage.getItem('kelorin_custom_logo');
   applyLogoToUI(savedLogo);
   
-  // State awal: tampilkan login screen, sembunyikan yang lain
+  // State awal: sembunyikan semua, tampilkan login
+  hideAllScreens();
   loginScreen.classList.remove('hidden');
-  homeScreen.classList.add('hidden');
-  scanScreen.classList.add('hidden');
-  chatScreen.classList.add('hidden');
+  loginScreen.style.display = 'flex';
   bottomNavbar.classList.add('hidden');
   
-  console.log('?? UI initialized - Waiting for user login...');
+  console.log('✅ UI initialized - Waiting for user login...');
 });
 
 // =============================================================================
