@@ -7,7 +7,9 @@
 // =============================================================================
 
 // Screens
+const landingScreen = document.getElementById('landing-screen');
 const loginScreen = document.getElementById('login-screen');
+const registerScreen = document.getElementById('register-screen');
 const homeScreen = document.getElementById('home-screen');
 const scanScreen = document.getElementById('scan-screen');
 const chatScreen = document.getElementById('chat-screen');
@@ -71,7 +73,7 @@ const avatarUploadTrigger = document.getElementById('avatar-upload-trigger');
  * Menyembunyikan semua screen utama
  */
 function hideAllScreens() {
-  const screens = [loginScreen, homeScreen, scanScreen, chatScreen, profileScreen, pesananScreen, stokScreen];
+  const screens = [landingScreen, loginScreen, registerScreen, homeScreen, scanScreen, chatScreen, profileScreen, pesananScreen, stokScreen];
   screens.forEach(s => {
     if (s) {
       s.classList.add('hidden');
@@ -91,8 +93,8 @@ function showScreen(screenId) {
   const screen = document.getElementById(screenId);
   if (screen) {
     screen.classList.remove('hidden');
-    // Semua screen utama butuh display flex agar layout flex-col bekerja
-    if (['home-screen', 'scan-screen', 'chat-screen', 'profile-screen', 'pesanan-screen', 'stok-screen'].includes(screenId)) {
+    // Screens yang butuh display flex
+    if (['landing-screen', 'login-screen', 'register-screen', 'home-screen', 'scan-screen', 'chat-screen', 'profile-screen', 'pesanan-screen', 'stok-screen'].includes(screenId)) {
       screen.style.display = 'flex';
     }
   }
@@ -174,7 +176,121 @@ if (benefitsCarousel && carouselIndicators) {
 }
 
 // =============================================================================
-// 3. LOGIKA LOGIN
+// 3. LOGIKA LANDING & DAFTAR
+// =============================================================================
+
+// --- Landing Screen ---
+const landingBtnMasuk  = document.getElementById('landing-btn-masuk');
+const landingBtnDaftar = document.getElementById('landing-btn-daftar');
+const loginBackBtn     = document.getElementById('login-back-btn');
+const loginToDaftar    = document.getElementById('login-to-daftar');
+const registerBackBtn  = document.getElementById('register-back-btn');
+const registerToLogin  = document.getElementById('register-to-login');
+
+if (landingBtnMasuk) {
+  landingBtnMasuk.addEventListener('click', () => {
+    hideAllScreens();
+    loginScreen.classList.remove('hidden');
+    loginScreen.style.display = 'flex';
+  });
+}
+
+if (landingBtnDaftar) {
+  landingBtnDaftar.addEventListener('click', () => {
+    hideAllScreens();
+    registerScreen.classList.remove('hidden');
+    registerScreen.style.display = 'flex';
+  });
+}
+
+if (loginBackBtn) {
+  loginBackBtn.addEventListener('click', () => {
+    hideAllScreens();
+    landingScreen.classList.remove('hidden');
+    landingScreen.style.display = 'flex';
+  });
+}
+
+if (loginToDaftar) {
+  loginToDaftar.addEventListener('click', () => {
+    hideAllScreens();
+    registerScreen.classList.remove('hidden');
+    registerScreen.style.display = 'flex';
+  });
+}
+
+if (registerBackBtn) {
+  registerBackBtn.addEventListener('click', () => {
+    hideAllScreens();
+    landingScreen.classList.remove('hidden');
+    landingScreen.style.display = 'flex';
+  });
+}
+
+if (registerToLogin) {
+  registerToLogin.addEventListener('click', () => {
+    hideAllScreens();
+    loginScreen.classList.remove('hidden');
+    loginScreen.style.display = 'flex';
+  });
+}
+
+// --- Role selector di form Daftar ---
+let selectedRole = 'petani'; // default
+
+function selectRole(role) {
+  selectedRole = role;
+  const btnPetani = document.getElementById('role-petani');
+  const btnUmkm   = document.getElementById('role-umkm');
+  if (role === 'petani') {
+    btnPetani.className = 'role-btn bg-green-600 text-white font-bold py-2.5 rounded-xl text-sm border-2 border-green-600 transition active:scale-95';
+    btnUmkm.className   = 'role-btn bg-white text-gray-600 font-bold py-2.5 rounded-xl text-sm border-2 border-gray-200 transition active:scale-95';
+  } else {
+    btnUmkm.className   = 'role-btn bg-green-600 text-white font-bold py-2.5 rounded-xl text-sm border-2 border-green-600 transition active:scale-95';
+    btnPetani.className = 'role-btn bg-white text-gray-600 font-bold py-2.5 rounded-xl text-sm border-2 border-gray-200 transition active:scale-95';
+  }
+}
+
+// --- Proses Daftar ---
+const registerBtn = document.getElementById('register-btn');
+if (registerBtn) {
+  registerBtn.addEventListener('click', () => {
+    const name     = document.getElementById('register-name')?.value.trim();
+    const input    = document.getElementById('register-input')?.value.trim();
+    const location = document.getElementById('register-location')?.value.trim();
+    const pass     = document.getElementById('register-password')?.value.trim();
+    const confirm  = document.getElementById('register-confirm')?.value.trim();
+
+    if (!name || !input || !location || !pass || !confirm) {
+      Swal.fire({ icon: 'error', title: 'Formulir Belum Lengkap', text: 'Mohon isi semua kolom terlebih dahulu.', confirmButtonText: 'Oke' });
+      return;
+    }
+    if (pass !== confirm) {
+      Swal.fire({ icon: 'error', title: 'Kata Sandi Tidak Cocok', text: 'Pastikan kedua kata sandi sama.', confirmButtonText: 'Oke' });
+      return;
+    }
+
+    // Simpan nama & lokasi ke state (prototype, tidak ada backend)
+    if (profileDisplayName)  profileDisplayName.textContent  = name;
+    if (profileDisplayLocation) profileDisplayLocation.textContent = location;
+    if (homeAvatarText) homeAvatarText.textContent = name.substring(0, 2).toUpperCase();
+    if (profileAvatarText) profileAvatarText.textContent = name.substring(0, 2).toUpperCase();
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Akun Berhasil Dibuat!',
+      text: `Selamat datang, ${name}! Akun Anda sebagai ${selectedRole === 'petani' ? 'Petani' : 'UMKM'} sudah aktif.`,
+      confirmButtonText: 'Mulai'
+    }).then(() => {
+      showScreen('home-screen');
+      bottomNavbar.classList.remove('hidden');
+      updateNavbarIndicator('home-screen');
+    });
+  });
+}
+
+// =============================================================================
+// 4. LOGIKA LOGIN (lanjutan dari sebelumnya — nomor section digeser)
 // =============================================================================
 
 /**
@@ -389,46 +505,39 @@ shutterBtn.addEventListener('click', () => {
 
 function applyLogoToUI(base64Image) {
     if (base64Image) {
-        // Terapkan ke Layar Login
-        if(mainAppLogo) {
+        // Terapkan custom logo (hasil upload) ke semua layar
+        if (mainAppLogo) {
             mainAppLogo.src = base64Image;
             mainAppLogo.classList.remove('hidden');
-            mainAppTitle.classList.add('hidden');
+            if (mainAppTitle) mainAppTitle.classList.add('hidden');
         }
-        
-        // Terapkan ke Layar Profil
-        if(profileLogoPreview) {
+        if (profileLogoPreview) {
             profileLogoPreview.src = base64Image;
             profileLogoPreview.classList.remove('hidden');
-            profileLogoPlaceholder.classList.add('hidden');
-            btnResetLogo.classList.remove('hidden');
+            if (profileLogoPlaceholder) profileLogoPlaceholder.classList.add('hidden');
+            if (btnResetLogo) btnResetLogo.classList.remove('hidden');
         }
-
-        // Terapkan ke Layar Home
-        if(homeDynamicLogo) {
+        if (homeDynamicLogo) {
             homeDynamicLogo.src = base64Image;
             homeDynamicLogo.classList.remove('hidden');
-            homeDefaultLogo.classList.add('hidden');
+            if (homeDefaultLogo) homeDefaultLogo.classList.add('hidden');
         }
     } else {
-        // Reset ke teks bawaan
-        if(mainAppLogo) {
-            mainAppLogo.src = '';
-            mainAppLogo.classList.add('hidden');
-            mainAppTitle.classList.remove('hidden');
+        // Tidak ada logo custom — biarkan hardcoded src="assets/Logo.png" tetap tampil
+        // Jangan sembunyikan mainAppLogo & homeDynamicLogo karena src-nya sudah static
+        if (mainAppLogo) {
+            mainAppLogo.classList.remove('hidden');
+            // Jangan ubah src — biarkan assets/Logo.png
         }
-        
-        if(profileLogoPreview) {
+        if (profileLogoPreview) {
             profileLogoPreview.src = '';
             profileLogoPreview.classList.add('hidden');
-            profileLogoPlaceholder.classList.remove('hidden');
-            btnResetLogo.classList.add('hidden');
+            if (profileLogoPlaceholder) profileLogoPlaceholder.classList.remove('hidden');
+            if (btnResetLogo) btnResetLogo.classList.add('hidden');
         }
-
-        if(homeDynamicLogo) {
-            homeDynamicLogo.src = '';
-            homeDynamicLogo.classList.add('hidden');
-            homeDefaultLogo.classList.remove('hidden');
+        if (homeDynamicLogo) {
+            homeDynamicLogo.classList.remove('hidden');
+            if (homeDefaultLogo) homeDefaultLogo.classList.add('hidden');
         }
     }
 }
@@ -475,7 +584,7 @@ if (btnLogout) {
             confirmButtonColor: '#ef4444'
         }).then((result) => {
             if (result.isConfirmed) {
-                showScreen('login-screen');
+                showScreen('landing-screen');
                 bottomNavbar.classList.add('hidden');
             }
         });
@@ -841,10 +950,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (el) el.textContent = savedLokasi;
   }
 
-  // State awal: sembunyikan semua, tampilkan login
+  // State awal: sembunyikan semua, tampilkan landing page terlebih dahulu
   hideAllScreens();
-  loginScreen.classList.remove('hidden');
-  loginScreen.style.display = 'flex';
+  landingScreen.classList.remove('hidden');
+  landingScreen.style.display = 'flex';
   bottomNavbar.classList.add('hidden');
 
   // Render chart awal (Minggu Ini)
